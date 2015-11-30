@@ -11,7 +11,7 @@ perfect agreement between the results of the analytical and numerical results va
 code and its execution. 
 
 In the code we used anonymous functions to define the basis set, unicode character in function
-definitions, and the simple metafunction interface to parallel and distributed tasks for 
+definitions, and the simple macro interface to parallel and distributed tasks for 
 workload distribution on many-core and multi-node setups. 
 
 
