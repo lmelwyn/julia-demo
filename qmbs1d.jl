@@ -17,7 +17,7 @@
 ## Definition of the inner product <φ1|φ2> 
 @everywhere function ∫(φ1::Function,φ2::Function)
     ψ(x)=φ1(x)*φ2(x)::Float64
-    return 2*quadgk(ψ,0,1,abstol=1e-6)[1]::Float64
+    return 2*quadgk(ψ,0,1,abstol=1e-8)[1]::Float64
 end
 
 ##  Infinite well energies 
@@ -28,7 +28,7 @@ end
 # The numerical Hamiltonian 
 function hamiltonian(n::Int)
   h = SharedArray(Float64,n^2)
-  @time @sync for j=1:n
+  @sync for j=1:n
     @parallel for i=j:n
       h[i+(j-1)*n] = ɛ(i,j) + ∫(φ(i),Vφ(j))::Float64 
      end
@@ -45,7 +45,7 @@ end
 ## Checking orthonomality 
 function orthonormal(n::Int)
     v = SharedArray(Float64,n^2)
-    @time @sync for j=1:n
+    @sync for j=1:n
         @parallel for i=j:n
             v[i+(j-1)*n] = ∫(φ(i),φ(j))::Float64
         end
@@ -54,6 +54,10 @@ function orthonormal(n::Int)
     return m+transpose(m-triu(m))
 end
 
-# println(orthonormal(5))
-println(eigvals(hamiltonian(10)))
-println(eigvals(hamiltonian_exact(10)))
+function main(n::Int) 
+   @time println("norm of difference = ", norm(eigvals(hamiltonian(n))-eigvals(hamiltonian_exact(n))))
+end
+
+main(400)
+
+
