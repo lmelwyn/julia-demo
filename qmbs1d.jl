@@ -17,7 +17,7 @@
 ## Definition of the inner product <φ1|φ2> 
 @everywhere function ∫(φ1::Function,φ2::Function)
     ψ(x)=φ1(x)*φ2(x)::Float64
-    return 2*quadgk(ψ,0,1)[1]::Float64
+    return 2*quadgk(ψ,0,1,abstol=1e-6)[1]::Float64
 end
 
 ##  Infinite well energies 
